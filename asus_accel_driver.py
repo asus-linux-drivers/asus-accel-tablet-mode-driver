@@ -156,7 +156,7 @@ while True:
     y = read_accel_file("in_accel_y_raw")
     z = read_accel_file("in_accel_z_raw")
 
-    crit_for_tablet_mode = ((x >= -5 and x <= 5) and (y >= -5 and y <= 5) and z <= -9)
+    crit_for_tablet_mode = ((x >= -5 and x <= 5) and (y >= -5 and y <= 5) and z <= -9) # TODO: add better recognition, probably inverted check? Or something more sofistikated with movement trace?
 
     # Call only one when is state changed
     if crit_for_tablet_mode and tablet_mode is False:
