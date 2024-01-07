@@ -23,6 +23,10 @@ touch "$LOGS_UNINSTALL_LOG_FILE_PATH"
 
 	echo
 
+	source uninstall_user_groups.sh
+
+	echo
+
 	source uninstall_service.sh
 
 	echo

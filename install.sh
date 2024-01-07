@@ -42,6 +42,12 @@ LOGS_INSTALL_LOG_FILE_PATH="$LOGS_DIR_PATH/$LOGS_INSTALL_LOG_FILE_NAME"
     sudo install asus_accel_driver.py "$INSTALL_DIR_PATH"
     sudo install -t "$INSTALL_DIR_PATH/conf" conf/*.py
 
+    echo
+
+    source install_user_groups.sh
+
+    echo
+
     source install_layout_select.sh
 
     echo
