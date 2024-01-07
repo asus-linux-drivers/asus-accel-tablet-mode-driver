@@ -15,8 +15,6 @@ logging.basicConfig(
 )
 log = logging.getLogger('Asus Accel Tablet Mode Driver')
 
-# TODO: nezvladne se vytvorit soubor error.log z systemd service
-
 # https://github.com/ejtaal/scripts/blob/fe16a68b8ce3d1f95a2c855dd8b52903600b462f/yoga-2-11-rotate.py
 
 # UN5401QAB_UN5401QA:
@@ -88,28 +86,32 @@ except:
     sys.exit(1)
 
 
-def isEventKey(event):
-    if hasattr(event, "name") and hasattr(EV_KEY, event.name):
+def isEventKey(key):
+    if hasattr(key, "name") and hasattr(EV_KEY, key.name):
         return True
-    elif hasattr(event, "name") and hasattr(EV_SW, event.name):
+    elif hasattr(key, "name") and hasattr(EV_SW, key.name):
         return True
-    else:
-        return False
+    return False
 
 
-def getArrayOfFlipKeysFromLayout(layout):
-    if isinstance(layout.flip_key, list):
-        return layout.flip_key
-    return [layout.flip_key]
+def isEventInput(event):
+    if hasattr(event, "code") and isEventKey(event.code):
+        return True
+    return False
 
 
 dev = Device()
 dev.name = "Asus WMI accel tablet mode"
 
-flip_keys = getArrayOfFlipKeysFromLayout(layout)
-for key_to_enable in flip_keys:
+for key_to_enable in layout.flip_keys:
     if isEventKey(key_to_enable):
         dev.enable(key_to_enable)
+for event_to_enable in layout.laptop_mode_events:
+    if isEventInput(event_to_enable):
+        dev.enable(event_to_enable.code)
+for event_to_enable in layout.tablet_mode_events:
+    if isEventKey(event_to_enable):
+        dev.enable(event_to_enable.code)
 
 # Sleep for a bit so udev, libinput, Xorg, Wayland, ... all have had
 # a chance to see the device and initialize it. Otherwise the event
@@ -119,18 +121,31 @@ udev = dev.create_uinput_device()
 sleep(1)
 
 
-def flip():
+def flip(tablet_mode):
+
     keys_to_send_press_events = []
-    for keys_to_send_press in flip_keys:
+    keys_to_send_release_events = []
+    events_to_send = []
+
+    # Keys
+    for keys_to_send_press in layout.flip_keys:
         if isEventKey(keys_to_send_press):
             keys_to_send_press_events.append(InputEvent(keys_to_send_press, 1))
-
-    keys_to_send_release_events = []
-    for keys_to_send_release in flip_keys:
-
+    for keys_to_send_release in layout.flip_keys:
         if isEventKey(keys_to_send_release):
             keys_to_send_release_events.append(InputEvent(keys_to_send_release, 0))
 
+    # Events
+    if tablet_mode:
+        for event_to_send in layout.tablet_mode_events:
+            if isEventInput(event_to_send):
+                events_to_send.append(event_to_send)
+    else:
+        for event_to_send in layout.laptop_mode_events:
+            if isEventInput(event_to_send):
+                events_to_send.append(event_to_send)
+
+    # Sync event
     sync_event = [
         InputEvent(EV_SYN.SYN_REPORT, 0)
     ]
@@ -139,6 +154,8 @@ def flip():
         udev.send_events(keys_to_send_press_events)
         udev.send_events(sync_event)
         udev.send_events(keys_to_send_release_events)
+        udev.send_events(sync_event)
+        udev.send_events(events_to_send)
         udev.send_events(sync_event)
     except OSError as e:
         log.error("Cannot send event, %s", e)
@@ -156,16 +173,16 @@ while True:
     y = read_accel_file("in_accel_y_raw")
     z = read_accel_file("in_accel_z_raw")
 
-    crit_for_tablet_mode = ((x >= -5 and x <= 5) and (y >= -5 and y <= 5) and z <= -9) # TODO: add better recognition, probably inverted check? Or something more sofistikated with movement trace?
+    criterium_for_accel_be_recognized_as_tablet_mode = ((x >= -5 and x <= 5) and (y >= -5 and y <= 5) and z <= -9) # TODO: add better recognition, probably inverted check? Or something more sofistikated with movement trace?
 
-    # Call only one when is state changed
-    if crit_for_tablet_mode and tablet_mode is False:
-        flip()
+    # Call only once when is state changed
+    if criterium_for_accel_be_recognized_as_tablet_mode and tablet_mode is False:
         tablet_mode = True
+        flip(tablet_mode)
         log.info("Flip to tablet mode")
-    elif not crit_for_tablet_mode and tablet_mode is True:
-        flip()
+    elif not criterium_for_accel_be_recognized_as_tablet_mode and tablet_mode is True:
         tablet_mode = False
+        flip(tablet_mode)
         log.info("Flip to laptop mode")
 
-    sleep (0.5)
+    sleep(0.5)

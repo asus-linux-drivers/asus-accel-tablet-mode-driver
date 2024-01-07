@@ -32,7 +32,7 @@ LOGS_INSTALL_LOG_FILE_PATH="$LOGS_DIR_PATH/$LOGS_INSTALL_LOG_FILE_NAME"
 
     # do not install __pycache__
     if [[ -d conf/__pycache__ ]]; then
-        rm -rf conf/__pycache__
+        sudo rm -rf conf/__pycache__
     fi
 
     INSTALL_DIR_PATH="/usr/share/asus-accel-tablet-mode-driver"

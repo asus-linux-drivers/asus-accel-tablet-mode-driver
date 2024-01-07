@@ -6,9 +6,9 @@
 [![GitHub commits](https://img.shields.io/github/commits-since/asus-linux-drivers/asus-accel-tablet-mode-driver/v0.0.1.svg)](https://GitHub.com/asus-linux-drivers/asus-accel-tablet-mode-driver/commit/)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fasus-linux-drivers%2Fasus-fliplock-driver&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
-The driver is written in python and runs as a systemctl service. TODO:
+The driver is written in python and runs as a systemctl service. Driver allow to configure flip events using accelerometer.
 
-If you find this project useful, please do not forget to give it a [![GitHub stars](https://img.shields.io/github/stars/asus-linux-drivers/asus-numberpad-driver.svg?style=social&label=Star&maxAge=2592000)](https://github.com/asus-linux-drivers/asus-accel-tablet-mode-driver/stargazers) People already did!
+If you find this project useful, please do not forget to give it a [![GitHub stars](https://img.shields.io/github/stars/asus-linux-drivers/asus-accel-tablet-mode-driver.svg?style=social&label=Star&maxAge=2592000)](https://github.com/asus-linux-drivers/asus-accel-tablet-mode-driver/stargazers) People already did!
 
 ## Changelog
 
@@ -16,7 +16,27 @@ If you find this project useful, please do not forget to give it a [![GitHub sta
 
 ## Features
 
-- TODO:
+- Is allowed to configure key press & release for each flip (`KEY_PROG2`)
+- Is allowed to configure event with different state for each mode (`switch tablet-mode state 0`, `switch tablet-mode state 1`)
+
+```
+$ sudo libinput debug-events
+...
+-event7   DEVICE_ADDED            Asus WMI accel tablet mode        seat0 default group9  cap:kS
+...
+ event7   KEYBOARD_KEY            +0.000s	KEY_PROG2 (149) pressed
+ event7   KEYBOARD_KEY            +0.000s	KEY_PROG2 (149) released
+ event7   SWITCH_TOGGLE           +0.000s	switch tablet-mode state 1
+ event7   KEYBOARD_KEY            +1.004s	KEY_PROG2 (149) pressed
+ event7   KEYBOARD_KEY            +1.004s	KEY_PROG2 (149) released
+ event7   SWITCH_TOGGLE           +1.004s	switch tablet-mode state 0
+ ```
+
+```
+$ sudo acpi_listen
+video/tabletmode TBLT 0000008A 00000001
+video/tabletmode TBLT 0000008A 00000000
+```
 
 
 ## Installation
