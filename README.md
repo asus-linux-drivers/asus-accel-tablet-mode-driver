@@ -16,8 +16,8 @@ If you find this project useful, please do not forget to give it a [![GitHub sta
 
 ## Features
 
-- Is allowed to configure key press & release for each flip (`KEY_PROG2`)
-- Is allowed to configure event with different state for each mode (`switch tablet-mode state 0`, `switch tablet-mode state 1`)
+- Is allowed to configure key press & release for each flip (default is `KEY_PROG2`)
+- Is allowed to configure event with different state for each mode (default is `SWITCH_TOGGLE` : `switch tablet-mode state 0` or `switch tablet-mode state 1`)
 
 ```
 $ sudo libinput debug-events
