@@ -1,0 +1,14 @@
+[Unit]
+Description=Asus Accel Tablet Mode Driver
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env python3 /usr/share/asus-accel-tablet-mode-driver/asus_accel_driver.py $LAYOUT_NAME
+StandardOutput=append:$ERROR_LOG_FILE_PATH
+StandardError=append:$ERROR_LOG_FILE_PATH
+TimeoutSec=5
+Restart=on-failure
+Environment="DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS"
+
+[Install]
+WantedBy=default.target
