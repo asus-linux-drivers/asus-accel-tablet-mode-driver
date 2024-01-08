@@ -15,8 +15,6 @@ logging.basicConfig(
 )
 log = logging.getLogger('Asus Accel Tablet Mode Driver')
 
-# https://github.com/ejtaal/scripts/blob/fe16a68b8ce3d1f95a2c855dd8b52903600b462f/yoga-2-11-rotate.py
-
 # UN5401QAB_UN5401QA:
 #
 # 2024-01-07 19:36:22,134 INFO     E: DRIVER=hid_sensor_accel_3d
@@ -173,7 +171,7 @@ while True:
     y = read_accel_file("in_accel_y_raw")
     z = read_accel_file("in_accel_z_raw")
 
-    criterium_for_accel_be_recognized_as_tablet_mode = ((x >= -5 and x <= 5) and (y >= -5 and y <= 5) and z <= -9) # TODO: add better recognition, probably inverted check? Or something more sofistikated with movement trace?
+    criterium_for_accel_be_recognized_as_tablet_mode = ((x >= -5 and x <= 5) and (y >= -5 and y <= 5) and z <= -9)
 
     # Call only once when is state changed
     if criterium_for_accel_be_recognized_as_tablet_mode and tablet_mode is False:
