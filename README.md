@@ -38,13 +38,10 @@ video/tabletmode TBLT 0000008A 00000001
 video/tabletmode TBLT 0000008A 00000000
 ```
 
-<<<<<<< Updated upstream
 ## Limitations
 
 - This driver identifies tablet mode by accelerometer data which means when is laptop's display almost in the horizontal position it is recognized as tablet mode and does not matter whether is laptop flipped or not
 
-=======
->>>>>>> Stashed changes
 ## Installation
 
 Get latest dev version using `git`
