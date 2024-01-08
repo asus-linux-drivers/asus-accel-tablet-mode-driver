@@ -83,5 +83,5 @@ To activate logger, do in a console:
 LOG=DEBUG sudo -E ./asus_accel_driver.py "default"
 ```
 
-**Why was this project created?** For laptops which do not indicate tablet modes (e.g. `UN5401QAB_UN5401QA` does not send `EV_SW.SW_TABLET_MODE` or `EV_KEY.KEY_PROG2` neither)
+**Why was this project created?** For laptops which do not indicate tablet modes (e.g. `Zenbook UN5401QAB` or `Vivobook TM420` do not send `EV_SW.SW_TABLET_MODE` or `EV_KEY.KEY_PROG2` either)
 ([see the reported issue for Kernel](https://bugzilla.kernel.org/show_bug.cgi?id=214675))
