@@ -7,7 +7,6 @@ LOGS_DIR_PATH="/var/log/asus-accel-tablet-mode-driver"
 # log output from every uninstalling attempt aswell
 LOGS_UNINSTALL_LOG_FILE_NAME=uninstall-"$(date +"%d-%m-%Y-%H-%M-%S")".log
 LOGS_UNINSTALL_LOG_FILE_PATH="$LOGS_DIR_PATH/$LOGS_UNINSTALL_LOG_FILE_NAME"
-touch "$LOGS_UNINSTALL_LOG_FILE_PATH"
 
 {
     INSTALL_DIR_PATH="/usr/share/asus-accel-tablet-mode-driver"
