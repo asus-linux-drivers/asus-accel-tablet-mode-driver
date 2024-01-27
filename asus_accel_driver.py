@@ -108,7 +108,7 @@ for event_to_enable in layout.laptop_mode_events:
     if isEventInput(event_to_enable):
         dev.enable(event_to_enable.code)
 for event_to_enable in layout.tablet_mode_events:
-    if isEventKey(event_to_enable):
+    if isEventInput(event_to_enable):
         dev.enable(event_to_enable.code)
 
 # Sleep for a bit so udev, libinput, Xorg, Wayland, ... all have had
