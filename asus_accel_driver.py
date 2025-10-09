@@ -164,23 +164,34 @@ def read_accel_file(name):
     fp.seek(0)
     return float(fp.read()) #* 1 # TODO: * scale?
 
-tablet_mode = False
 
+default_screen_string = ['hyprctl', 'keyword', 'monitor', 'eDP-1,', 'preferred,', 'auto,', '1.5,', 'transform,', '0']
+last_value = value = '0'
 while True:
     x = read_accel_file("in_accel_x_raw")
     y = read_accel_file("in_accel_y_raw")
-    z = read_accel_file("in_accel_z_raw")
+    # z = read_accel_file("in_accel_z_raw")
 
-    criterium_for_accel_be_recognized_as_tablet_mode = ((x >= -5 and x <= 5) and (y >= -5 and y <= 5) and z <= -9)
+    degree_0 = ((x >= -5 and x <= 5) and (y <= -5))
+    degree_90 = ((x > 5) and (y >= -5 and y <= 5))
+    degree_180 = ((x >= -5 and x <= 5) and (y >= 5))
+    degree_270 = ((x <= -5) and (y >= -5 and y <= 5))
+    layed = ((x >= -5 and x <= 5) and (y >= -5 and y <= 5))
 
-    # Call only once when is state changed
-    if criterium_for_accel_be_recognized_as_tablet_mode and tablet_mode is False:
-        tablet_mode = True
-        flip(tablet_mode)
-        log.info("Flip to tablet mode")
-    elif not criterium_for_accel_be_recognized_as_tablet_mode and tablet_mode is True:
-        tablet_mode = False
-        flip(tablet_mode)
-        log.info("Flip to laptop mode")
+    if layed:
+        pass
+    elif degree_0:
+        value = '0'
+    elif degree_90:
+        value = '1'
+    elif degree_180:
+        value = '2'
+    elif degree_270:
+        value = '3'
 
-    sleep(0.5)
+    if value != last_value:
+        last_value = value
+        default_screen_string[-1] = value
+        subprocess.run(default_screen_string)
+
+    sleep(3)
